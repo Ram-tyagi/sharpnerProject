@@ -8,6 +8,7 @@
     <label for=""> Phone Number</label>
     <input type="tel" name="phonenumber" />
     <button>submit</button>    
+    <ul id="listOfItems"></ul>
 </form>
 <script>
      function saveToLocalStorage(event){
@@ -23,7 +24,15 @@
                 phonenumber
             }
             localStorage.setItem('userdetails', JSON.stringify(obj));
+            showUserOnScreen(obj)
           
+        }
+        function showUserOnScreen(obj){
+            const parentEle=document.getElementById('listOfItems')
+            const childEle=document.createElement('li')
+            childEle.textContent=obj.name+'-'+obj.email+'-'+obj.phonenumber
+            parentEle.appendChild(childEle)
+            //parentEle.innerHtml=${obj.name}
         }
 </script>
 
