@@ -1,0 +1,99 @@
+<html>
+    <body>
+    <form onsubmit="saveToLocalStorage(event)">
+    <label for="">Name</label>
+    <input id="name" type="text" name="username" required/>
+    <label for="">Email</label>
+    <input id="email" type="email" name="emailId" required/>
+    <label for=""> Phone Number</label>
+    <input id="phonenumber" type="tel" name="phonenumber" />
+    <button>submit</button>    
+    <ul id="listOfItems"></ul>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js"></script>
+<script>
+     function saveToLocalStorage(event){
+            event.preventDefault();
+            const name=event.target.username.value;
+            const email=event.target.emailId.value;
+            const phonenumber=event.target.phonenumber.value;
+            
+            
+            const user={
+                name,
+                email,
+                phonenumber
+            }
+         
+            axios.post("https://crudcrud.com/api/e59e27c82b2b46c08b360ea0d98b5000/appointmentdata",user)
+            .then((respose)=>{
+                showUserOnScreen(response.data)
+                console.log(response)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+        window.addEventListener("DOMContentLoaded",()=>{
+            axios.get("https://crudcrud.com/api/e59e27c82b2b46c08b360ea0d98b5000/appointmentdata")
+            .then((response)=>{
+                for(var i=0;i<response.data.length;i++){
+                     showUserOnScreen(response.data[i])
+                }
+                
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        })
+            
+            
+            
+          
+          
+        
+        function showUserOnScreen(userId){
+            document.getElementById('email').value=' ';
+            document.getElementById('username').value=' ';
+            document.getElementById('phonenumber').value=' ';
+            if(localStorage.getItem(user.email)!==null){
+                removeUserFromScreen(user.email)
+            }
+
+            const parentNode=document.getElementById('listOfItems')
+            const childHTML=`<li id=${user._id}> ${user.name} - ${user.email}
+                <button onclick=deleteUser('${user._id}')> DeleteUser</button>
+                <button onclick=editUserDetails('${user.email}','${user.name}','${user.phonenumber}','${user._id}')> EditUser </button>
+                </li>`
+              parentNode.innerHTML=parentNode.innerHTML+childHTML
+            }
+
+            function editUserDetails(emailId,name,phonenumber,userId){
+                document.getElementById('email').value=emailId
+                document.getElementById('username').value=username
+                document.getElementById('phonenumber').value=phonenumber
+                
+                deleteUser(userId)
+
+            }
+            function deleteUser(userId){
+              axios.delete(`https://crudcrud.com/api/e59e27c82b2b46c08b360ea0d98b5000/appointmentdata/${userId}`)
+              .then((response)=>{
+                removeUserFromScreen(userId)
+              })
+              .catch((err)=>{
+                console.log(err)
+              })
+            }
+
+            function removeUserFromScreen(userId){
+                const parentNode=document.getElementById('listOfUser')
+                const childNodeToBeDeleted=document.getElementById(userId)
+                if(childNodeToBeDeleted){
+                    parentNode.removeChild(childNodeToBeDeleted)
+                }
+            }
+</script>
+
+    </body>
+</html>
