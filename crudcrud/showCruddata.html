@@ -1,0 +1,89 @@
+<html>
+    <body>
+    <form onsubmit="saveToLocalStorage(event)">
+    <label for="">Name</label>
+    <input id="name" type="text" name="username" required/>
+    <label for="">Email</label>
+    <input id="email" type="email" name="emailId" required/>
+    <label for=""> Phone Number</label>
+    <input id="phonenumber" type="tel" name="phonenumber" />
+    <button>submit</button>    
+    <ul id="listOfItems"></ul>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js">
+     function saveToLocalStorage(event){
+            event.preventDefault();
+            const name=event.target.username.value;
+            const email=event.target.emailId.value;
+            const phonenumber=event.target.phonenumber.value;
+            
+            
+            const obj={
+                name,
+                email,
+                phonenumber
+            }
+         
+            axios.post("https://crudcrud.com/api/42ab741642804bc59f9fd9dc7a56c4fa/appointmentdata",obj)
+            .then((respose)=>{
+                showUserOnScreen(response.data)
+                console.log(response)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+        window.addEventListener("DOMContentLoaded",()=>{
+            axios.get("https://crudcrud.com/api/42ab741642804bc59f9fd9dc7a56c4fa/appointmentdata")
+            .then((response)=>{
+                for(var i=0;i<response.data.length;i++){
+                     showUserOnScreen(response.data[i])
+                }
+                console.log(response)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        })
+            
+            
+            
+          
+          
+        
+        function showUserOnScreen(obj){
+            const parentEle=document.getElementById('listOfItems')
+            const childEle=document.createElement('li')
+            childEle.textContent=obj.name+'-'+obj.email+'-'+obj.phonenumber
+            parentEle.appendChild(childEle)
+          
+
+         const deleteButton=document.createElement('input') 
+         deleteButton.type="button"
+         deleteButton.value="delete"
+         deleteButton.onclick=()=>{
+         
+            parentEle.removeChild(childEle)
+         }
+         childEle.appendChild(deleteButton)
+         parentEle.appendChild(childEle)
+         
+         const editButton=document.createElement('input') 
+         editButton.type="button"
+         editButton.value="edit"
+        editButton.onclick=()=>{
+         
+            parentEle.removeChild(childEle)
+            document.getElementById('usernameInputTag').value=obj.name
+            document.getElementById('emailInputTag').value=obj.email
+            document.getElementById('phonenumberInputTag').value=obj.phonenumber
+         }
+         childEle.appendChild(deleteButton)
+         childEle.appendChild(editButton)
+         parentEle.appendChild(childEle)
+         
+        }
+</script>
+
+    </body>
+</html>
