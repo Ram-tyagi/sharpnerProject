@@ -52,7 +52,7 @@
           
           
         
-        function showUserOnScreen(user){
+        function showUserOnScreen(userId){
             document.getElementById('email').value=' ';
             document.getElementById('username').value=' ';
             document.getElementById('phonenumber').value=' ';
@@ -63,17 +63,17 @@
             const parentNode=document.getElementById('listOfItems')
             const childHTML=`<li id=${user._id}> ${user.name} - ${user.email}
                 <button onclick=deleteUser('${user._id}')> DeleteUser</button>
-                <button onclick=editUserDetails('${user._id}','${user.name}')
+                <button onclick=editUserDetails('${user.email}','${user.name}','${user.phonenumber}','${user._id}')> EditUser </button>
                 </li>`
               parentNode.innerHTML=parentNode.innerHTML+childHTML
             }
 
-            function editUserDetails(emailId,name,phonenumber){
+            function editUserDetails(emailId,name,phonenumber,userId){
                 document.getElementById('email').value=emailId
-                document.getElementById('username').value=emailId
+                document.getElementById('username').value=username
                 document.getElementById('phonenumber').value=phonenumber
                 
-                deleteUser(emailId)
+                deleteUser(userId)
 
             }
             function deleteUser(userId){
